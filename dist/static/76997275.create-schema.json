@@ -1,0 +1,285 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Titre (interne)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "type": "slideImage",
+            "title": "Image"
+          },
+          {
+            "type": "slideVimeo",
+            "title": "Vidéo Vimeo"
+          }
+        ],
+        "name": "slides",
+        "type": "array"
+      },
+      {
+        "initialValue": 5000,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1000
+              },
+              {
+                "flag": "max",
+                "constraint": 60000
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Durée par défaut pour les slides sans durée spécifiée",
+        "name": "defaultDuration",
+        "type": "number",
+        "title": "Durée par défaut (ms)"
+      }
+    ],
+    "name": "slideshow",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "title": "Texte alternatif"
+      },
+      {
+        "initialValue": 100,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "100 = taille normale, 50 = moitié, 200 = double",
+        "name": "scale",
+        "type": "number",
+        "title": "Echelle (%)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Haut Gauche",
+              "value": "11"
+            },
+            {
+              "title": "Haut Centre",
+              "value": "21"
+            },
+            {
+              "title": "Haut Droite",
+              "value": "31"
+            },
+            {
+              "title": "Milieu Gauche",
+              "value": "12"
+            },
+            {
+              "title": "Centre",
+              "value": "22"
+            },
+            {
+              "title": "Milieu Droite",
+              "value": "32"
+            },
+            {
+              "title": "Bas Gauche",
+              "value": "13"
+            },
+            {
+              "title": "Bas Centre",
+              "value": "23"
+            },
+            {
+              "title": "Bas Droite",
+              "value": "33"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "22",
+        "name": "position",
+        "type": "string"
+      },
+      {
+        "description": "Laisser vide pour utiliser la durée par défaut",
+        "name": "duration",
+        "type": "number",
+        "title": "Durée (ms)"
+      }
+    ],
+    "name": "slideImage",
+    "type": "object",
+    "title": "Image"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^\\d+$/",
+                  "name": "vimeoId",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error",
+            "message": "Entrez uniquement l'ID numérique"
+          }
+        ],
+        "description": "Ex: 76979871 (depuis vimeo.com/76979871)",
+        "name": "vimeoId",
+        "type": "string",
+        "title": "ID Vidéo Vimeo"
+      },
+      {
+        "initialValue": 100,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "scale",
+        "type": "number",
+        "title": "Echelle (%)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Haut Gauche",
+              "value": "11"
+            },
+            {
+              "title": "Haut Centre",
+              "value": "21"
+            },
+            {
+              "title": "Haut Droite",
+              "value": "31"
+            },
+            {
+              "title": "Milieu Gauche",
+              "value": "12"
+            },
+            {
+              "title": "Centre",
+              "value": "22"
+            },
+            {
+              "title": "Milieu Droite",
+              "value": "32"
+            },
+            {
+              "title": "Bas Gauche",
+              "value": "13"
+            },
+            {
+              "title": "Bas Centre",
+              "value": "23"
+            },
+            {
+              "title": "Bas Droite",
+              "value": "33"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "22",
+        "name": "position",
+        "type": "string"
+      },
+      {
+        "description": "Durée d'affichage avant passage au slide suivant",
+        "name": "duration",
+        "type": "number",
+        "title": "Durée (ms)"
+      }
+    ],
+    "name": "slideVimeo",
+    "type": "object",
+    "title": "Vidéo Vimeo"
+  }
+]

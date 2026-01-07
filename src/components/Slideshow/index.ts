@@ -1,0 +1,6 @@
+export { Slideshow } from './Slideshow'
+export { SlideImage } from './SlideImage'
+export { SlideVimeo } from './SlideVimeo'
+export { ProgressBar } from './ProgressBar'
+export { useSlideshow } from './useSlideshow'
+export type { Slide } from './useSlideshow'
