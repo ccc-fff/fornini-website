@@ -5,4 +5,5 @@ export default defineCliConfig({
     projectId: 'nbpf7c4u',
     dataset: 'fornini',
   },
+  studioHost: 'fornini-studio',
 })
