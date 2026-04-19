@@ -1,13 +1,21 @@
 import type { Metadata } from 'next'
+import localFont from 'next/font/local'
 import './globals.css'
 
+const jost = localFont({
+  src: '../../public/fonts/Jost-400-Book.ttf',
+  display: 'swap',
+  variable: '--font-jost',
+  weight: '400',
+})
+
 export const metadata: Metadata = {
-  title: 'Fornini',
-  description: 'Direction Créative & Direction Artistique',
-  authors: [{ name: 'Fornini' }],
+  title: 'Frédéric Fornini — Creative and Art Direction',
+  description: 'Frédéric Fornini — Creative and Art Direction',
+  authors: [{ name: 'Frédéric Fornini' }],
   openGraph: {
-    title: 'Fornini',
-    description: 'Direction Créative & Direction Artistique',
+    title: 'Frédéric Fornini — Creative and Art Direction',
+    description: 'Frédéric Fornini — Creative and Art Direction',
     type: 'website',
   },
 }
@@ -18,12 +26,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="fr">
-      <head>
-        <link rel="preconnect" href="https://cdn.sanity.io" />
-        <link rel="preconnect" href="https://player.vimeo.com" />
-      </head>
-      <body className="antialiased bg-black text-white overflow-hidden">
+    <html lang="fr" className={jost.variable}>
+      <body className="antialiased bg-[#141414] text-white">
         {children}
       </body>
     </html>
