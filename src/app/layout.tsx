@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const jost = localFont({
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="fr" className={jost.variable}>
       <body className="antialiased bg-[#141414] text-white">
         {children}
+        <Analytics />
       </body>
     </html>
   )
