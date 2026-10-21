@@ -14,7 +14,7 @@ export function ContactLink({ className }: { className?: string }) {
       className={`cursor-pointer leading-none transition-opacity hover:opacity-70 ${className ?? ''}`}
       aria-label="Envoyer un email à Frédéric Fornini"
     >
-      contact
+      Contact
     </button>
   )
 }

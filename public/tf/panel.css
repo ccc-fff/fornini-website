@@ -1,0 +1,111 @@
+/* Panneau Playground — repris de ~/Code/text-fusion/v2.html (2ed8461), puis réglages propres au site (fin du fichier). */
+  /* Panneau « Playground » relevé au pixel sur la maquette imago (Figma SKzPpdRetkRiVmh7mIiSHp, section 412:1363,
+     composants node/fields, node/title, atomic/*), typographie en mode IBM Plex Mono de la collection « Typo imago » (08/10). */
+  @font-face { font-family: "IBM Plex Mono"; font-weight: 300; font-display: swap; src: url(fonts/IBMPlexMono-Light.woff2) format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-display: swap; src: url(fonts/IBMPlexMono-Regular.woff2) format("woff2"); }
+  @font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: swap; src: url(fonts/IBMPlexMono-Medium.woff2) format("woff2"); }
+  :root { --interface: #1a1a1a; --field: #161616; --slider: #282828; --text: #c3c3cd; --highlight: #e9e9e9;
+    --nodes: #8e8e8e; --sep: #0c0c0c; --muted: #8a8a92; --scene: #79efff; --hover: #343434; --off: #575757; }
+  * { box-sizing: border-box; }
+
+  /* ouvert : un seul bloc 252 px, fond interface, coins 7 px, sans ombre ; fermé : la pastille du titre, liseré 1 px */
+  #panel { position: fixed; top: 12px; right: 12px; width: 252px; max-height: calc(100% - 24px); overflow-y: auto; scrollbar-width: none;
+    display: flex; flex-direction: column; gap: 0; z-index: 10; background: var(--interface); border-radius: 7px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; font-weight: 400; color: var(--text); }
+  #panel::-webkit-scrollbar { display: none; }
+  /* rien ne se sélectionne en tirant un curseur ; seuls les vrais champs de saisie restent sélectionnables */
+  #panel, #panel * { -webkit-user-select: none; user-select: none; }
+  #panel input, #panel textarea { -webkit-user-select: text; user-select: text; }
+  #panel .val:not(:focus) { -webkit-user-select: none; user-select: none; pointer-events: auto; }
+  #panel.hidden { background: transparent; border: 1px solid var(--off); overflow: hidden; }
+  #panel.hidden .card { display: none; }
+  #panel.hidden .ttl { background: transparent; }
+  #panel.hidden .act { background-image: url(ui/activator-off.svg); }
+  #panel.hidden .ttype { color: var(--off); }
+
+  .ttl { background: var(--interface); display: flex; gap: 8px; align-items: center; height: 30px; padding: 0 12px; flex: 0 0 auto; cursor: pointer; }
+  .act { width: 10px; height: 10px; flex: 0 0 auto; background: url(ui/activator-on.svg) center / contain no-repeat; }
+  .ttype { font-size: 14px; font-weight: 300; line-height: 18px; color: var(--text); text-transform: uppercase; letter-spacing: -.14px; }
+  .card { background: var(--interface); flex: 0 0 auto; }
+  .blk { display: flex; flex-direction: column; gap: 10px; padding: 6px 10px; border-bottom: 1px solid var(--sep); }
+  .blk:first-child { border-top: 1px solid var(--sep); }
+  .blk:last-child { border-bottom: 0; }
+  .body { display: flex; flex-direction: column; gap: 10px; }
+  .blk.collapsed > .body { display: none; }
+
+  .f { position: relative; display: flex; align-items: center; gap: 4px; height: 23px; border-radius: 20px; padding: 0 2px; flex: 0 0 auto; }
+  .f .lab { flex: 1 1 auto; min-width: 0; padding: 2px 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
+  .sec { cursor: pointer; user-select: none; }
+  .sec .lab { text-transform: uppercase; color: var(--text); }
+  .icbox { display: flex; align-items: center; gap: 6px; padding: 0 6px; height: 100%; flex: 0 0 auto; }
+  .ic { width: 8px; height: 8px; flex: 0 0 auto; background: center / contain no-repeat; cursor: pointer; border: 0; padding: 0; }
+  .ic-plus { background-image: url(ui/plus.svg); } .ic-plus:hover { background-image: url(ui/plus-hover.svg); }
+  .ic-delete { background-image: url(ui/delete.svg); } .ic-delete:hover { background-image: url(ui/delete-hover.svg); }
+  .ic-down, .ic-up { background-image: url(ui/down.svg); } .ic-down:hover, .ic-up:hover { background-image: url(ui/down-hover.svg); }
+  .ic-up { transform: rotate(180deg); }
+  .ic-right { background-image: url(ui/right.svg); } .ic-right:hover { background-image: url(ui/right-hover.svg); }
+  .ic[disabled] { opacity: .25; pointer-events: none; }
+  /* liste des préréglages : items de item/menus (imago 308:1197 / 1395) — 23 px, rayon 6, texte inséré de 12 px */
+  .plist { display: none; flex-direction: column; }
+  .plist.open { display: flex; }
+  .pitem { display: flex; align-items: center; gap: 6px; height: 23px; padding: 0 12px; border-radius: 6px; color: var(--nodes); cursor: pointer; }
+  .pitem span { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pitem .ic { display: none; }
+  .pitem:hover { background: var(--slider); color: var(--highlight); }
+  .pitem:hover .ic { display: block; }
+  .pitem.cur { color: var(--highlight); }
+  .pempty { height: 23px; display: flex; align-items: center; padding: 0 12px; color: var(--nodes); }
+  .btn[disabled] { opacity: .35; cursor: default; }
+  #box { position: fixed; display: none; border: 1px dashed var(--scene); pointer-events: none; z-index: 5; }
+  .f-col .ic-up, .f-col .ic-down { display: none; } .f-col:hover .ic-up, .f-col:hover .ic-down { display: block; }
+
+  .f-slider { background: var(--field); padding: 0 8px 0 12px; cursor: ew-resize; touch-action: none; }
+  .f-slider .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--slider); border-radius: 20px; pointer-events: none; }
+  .f-slider .tick { width: 2px; height: 11px; background: var(--nodes); margin: 0 3px; flex: 0 0 auto; position: relative; }
+  .f-slider .tick:hover { background: var(--highlight); }
+  .f-slider .val { width: 50px; flex: 0 0 50px; text-align: right; background: transparent; border: 0; color: var(--text);
+    font: inherit; padding: 2px 3px; position: relative; cursor: text; border-radius: 3px; }
+  .val:focus { outline: none; background: var(--hover); }
+  .dd { position: relative; background: var(--slider); border-radius: 6px; display: flex; align-items: center; gap: 6px; padding: 0 12px;
+    height: 23px; flex: 0 1 auto; max-width: 150px; min-width: 0; }
+  .dd:hover { background: var(--hover); }
+  .dd span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dd select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .f-tog { background: var(--field); padding: 0 8px 0 12px; cursor: pointer; }
+  .tog { width: 40px; height: 14px; flex: 0 0 auto; background: url(ui/toggle-off.svg) center / contain no-repeat; }
+  .tog.on { background-image: url(ui/toggle-on.svg); }
+  .f-col { background: var(--field); padding: 2px; }
+  .f-col .bar { flex: 1 1 auto; height: 100%; border-radius: 20px; position: relative; min-width: 0; }
+  .f-swatch { background: var(--field); padding: 2px 2px 2px 12px; }
+  .f-swatch .bar { flex: 0 0 96px; height: 100%; border-radius: 20px; position: relative; }
+  .bar input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .f-txt { background: var(--field); padding: 0 12px; height: auto; min-height: 23px; border-radius: 12px; }
+  .f-txt input, .f-txt textarea { flex: 1; background: transparent; border: 0; color: var(--text); font: inherit; padding: 6px 0; min-width: 0; outline: none; }
+  .f-txt textarea { height: 44px; resize: vertical; }
+  .note { margin: 0; color: var(--muted); font-size: 10.5px; line-height: 14.93px; padding: 0; text-box: trim-both cap alphabetic; }
+  .btnrow { display: flex; gap: 6px; }
+  .btn { background: var(--slider); border: 0; border-radius: 6px; color: var(--text); font: inherit; padding: 6px 8px; cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
+  .btn:hover { background: var(--hover); }
+  .btn input { display: none; }
+  .lay { display: flex; flex-direction: column; gap: 6px; padding-left: 8px; border-left: 1px solid var(--slider); margin: 0; }
+  svg.plot { width: 100%; height: auto; display: block; background: var(--field); border-radius: 4px; }
+  svg.plot text { font: 9px "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); }
+
+
+/* ── fornini.com (maquette Figma Fornini.com : Desktop 540:25, mobile 769:396) ──
+   marges de page 30 px × 17 px ; Contact · Portfolio en haut à gauche (desktop), en bas de part et d'autre (mobile) ;
+   Playground fermé par défaut, en haut à droite (desktop), sur toute la largeur (mobile). */
+#view { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#view.over-text { cursor: pointer; }
+#panel { top: 17px; right: 30px; max-height: calc(100% - 34px); }
+.site-links { position: fixed; top: 17px; left: 30px; z-index: 10; display: flex; gap: 20px; align-items: center; padding: 6px 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 300; font-size: 14px; line-height: 18px; letter-spacing: -.14px;
+  text-transform: uppercase; color: #fff; }
+.site-links a, .site-links button { color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 0; padding: 0;
+  cursor: pointer; text-decoration: none; transition: opacity .15s; }
+.site-links a:hover, .site-links button:hover { opacity: .7; }
+@media (max-width: 640px) {
+  /* ouvert, le panneau s'arrête à la moitié de l'écran : la phrase reste visible dessous (FF 21/10) */
+  #panel { left: 30px; right: 30px; width: auto; max-height: calc(50dvh - 17px); }
+  .site-links { top: auto; bottom: 17px; right: 30px; justify-content: space-between; }
+}

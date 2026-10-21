@@ -1,15 +1,27 @@
+import Script from 'next/script'
 import { ContactLink } from '@/components/ContactLink'
 
+const PORTFOLIO_PDF = 'https://drive.google.com/open?id=1cVxmqkaTLVh6J2QMD4Es8d3pmSUU8vJk&usp=drive_fs'
+
+// Phrase animée Text Fusion (WebGPU) plein écran + panneau « Playground » ; maquette Figma Fornini.com 540:25 / 769:396.
+// Mise en page des liens et du panneau : public/tf/panel.css ; comportement : public/tf/site.js.
 export default function HomePage() {
   return (
-    <main className="flex min-h-dvh w-full items-center justify-center px-3 py-9 md:p-9">
-      <div className="flex flex-col items-center gap-9">
-        <div className="flex flex-col items-center gap-[18px] text-center leading-none text-white text-[24px] md:text-[46px]">
-          <p>Frédéric Fornini</p>
-          <p>Creative and art direction</p>
-        </div>
-        <ContactLink className="text-[24px] md:text-[46px] text-white" />
-      </div>
+    <main className="fixed inset-0 overflow-hidden bg-black">
+      <link rel="stylesheet" href="/tf/panel.css" precedence="default" />
+      <canvas id="view" />
+      <div
+        id="tf-fallback"
+        className="absolute inset-0 hidden items-center justify-center whitespace-pre-line px-4 text-center font-[Inter] text-[clamp(32px,8vw,120px)] font-light uppercase leading-[1.05] text-white"
+      />
+      <nav className="site-links">
+        <ContactLink />
+        <a href={PORTFOLIO_PDF} target="_blank" rel="noopener noreferrer">
+          Portfolio
+        </a>
+      </nav>
+      <div id="panel" />
+      <Script src="/tf/site.js" type="module" strategy="afterInteractive" />
     </main>
   )
 }
