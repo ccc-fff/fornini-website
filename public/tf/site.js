@@ -28,12 +28,13 @@ const app = {
   current, filePresets,
   setP(n) { P = n; },
   save() { try { localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} },
-  changed(effect) { engine.setParams(P, effect); },
+  // l'histogramme du bruit n'est calculé que s'il est visible (panneau ouvert, groupe Noise déplié)
+  changed(effect) { engine.setParams(P, effect); engine.wantHist = panel.histVisible(); },
   note() {},
 };
 try { localStorage.setItem('text-fusion-current', current || ''); } catch (e) {}
 
-const engine = new Engine(canvas, { onError: (e) => console.error(e) });
+const engine = new Engine(canvas, { onError: (e) => console.error(e), onHist: (hs) => panel.setHist(hs) });
 panelEl.classList.add('hidden');
 const panel = createPanel(panelEl, app);
 window.TF = { engine, app, get P() { return P; } };      // accès pour les tests
@@ -50,7 +51,7 @@ function next() {
   const n = pick(app.current); if (!n || n === app.current) return;
   app.current = n; try { localStorage.setItem('text-fusion-current', n); } catch (e) {}
   P = load(JSON.parse(JSON.stringify(filePresets[n])));
-  panel.rebuild(); engine.setParams(P, 'quality');
+  panel.rebuild(); app.changed('quality');
 }
 
 const local = (e) => { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top, r]; };
@@ -66,7 +67,7 @@ canvas.addEventListener('pointerup', (e) => {     // un clic, pas un glissé
 canvas.addEventListener('pointerleave', () => { engine.mouse.on = 0; });
 window.addEventListener('keydown', (e) => {
   if (['TEXTAREA', 'INPUT', 'SELECT'].includes(e.target.tagName)) return;
-  if (e.key === 'h' || e.key === 'H') panelEl.classList.toggle('hidden');
+  if (e.key === 'h' || e.key === 'H') { panelEl.classList.toggle('hidden'); app.changed(null); }
 });
 let rz = 0; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => engine.setParams(P, 'layout'), 100); });
 
