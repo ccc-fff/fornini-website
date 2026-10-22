@@ -1,7 +1,7 @@
 import Script from 'next/script'
 import { ContactLink } from '@/components/ContactLink'
 
-const PORTFOLIO_PDF = 'https://drive.google.com/open?id=1cVxmqkaTLVh6J2QMD4Es8d3pmSUU8vJk&usp=drive_fs'
+const PORTFOLIO_PDF = 'https://drive.google.com/open?id=1cdyU8G9fyndaVV3abeMsNNAaF2S7aTGe&usp=drive_fs'
 
 // Phrase animée Text Fusion (WebGPU) plein écran + panneau « Playground » ; maquette Figma Fornini.com 540:25 / 769:396.
 // Mise en page des liens et du panneau : public/tf/panel.css ; comportement : public/tf/site.js.
